@@ -24,6 +24,33 @@ interface CreatorDashboardProps {
 export function CreatorDashboard({ analytics, variant = 'insights' }: CreatorDashboardProps) {
   const [activeTab, setActiveTab] = useState<'overview' | 'revenue' | 'participants'>('overview');
 
+  const handleResolveMarket = async (marketId: string, winningOutcomeId: string) => {
+    try {
+      const response = await fetch('/api/markets/resolve', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          marketId,
+          winningOutcomeId,
+          creatorAddress: '0x742d35Cc6634C0532925a3b844Bc454e4438f44e' // Mock creator address
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert(`Market resolved successfully! Transaction: ${result.txHash}\n\nPayout Summary:\n- Total Pool: ${result.summary.totalPool} ETH\n- Creator Cut: ${result.summary.creatorCut} ETH\n- Winners: ${result.summary.totalWinners}\n- Payout per Winner: ${result.summary.payoutPerWinner} ETH`);
+      } else {
+        alert(`Failed to resolve market: ${result.error}`);
+      }
+    } catch (error) {
+      console.error('Error resolving market:', error);
+      alert('Failed to resolve market. Please try again.');
+    }
+  };
+
   const stats = [
     {
       label: 'Total Revenue',
@@ -219,6 +246,45 @@ export function CreatorDashboard({ analytics, variant = 'insights' }: CreatorDas
           </div>
         </Card>
       )}
+
+      {/* Market Resolution */}
+      <Card>
+        <h3 className="text-lg font-semibold mb-4">Market Resolution</h3>
+        <div className="space-y-4">
+          <div className="text-sm text-textSecondary mb-4">
+            Resolve completed markets to distribute payouts to winners
+          </div>
+
+          {/* Mock active markets for resolution */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+              <div>
+                <h4 className="font-medium">Will ETH reach $5000 by end of 2024?</h4>
+                <p className="text-sm text-textSecondary">Pool: 3.8 ETH • 45 participants</p>
+              </div>
+              <Button
+                size="sm"
+                onClick={() => handleResolveMarket('demo_market_1', 'yes')}
+              >
+                Resolve as "Yes"
+              </Button>
+            </div>
+
+            <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+              <div>
+                <h4 className="font-medium">Will Bitcoin hit $100k in 2024?</h4>
+                <p className="text-sm text-textSecondary">Pool: 4.0 ETH • 28 participants</p>
+              </div>
+              <Button
+                size="sm"
+                onClick={() => handleResolveMarket('demo_market_2', 'no')}
+              >
+                Resolve as "No"
+              </Button>
+            </div>
+          </div>
+        </div>
+      </Card>
     </div>
   );
 }

@@ -11,6 +11,10 @@ import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { mockMarkets, mockAnalytics, mockLeaderboard } from '@/lib/mock-data';
 import { Market } from '@/lib/types';
+import { blockchainService } from '@/lib/services/blockchain';
+import { marketAdjustmentService } from '@/lib/services/marketAdjustment';
+import { farcasterService } from '@/lib/services/farcaster';
+import { ipfsService } from '@/lib/services/ipfs';
 import { 
   Plus, 
   TrendingUp, 
@@ -58,30 +62,58 @@ export default function HomePage() {
 
   const handleBetSubmit = async (amount: number) => {
     if (!betModal) return;
-    
-    // Update market with new bet
-    setMarkets(prevMarkets => 
-      prevMarkets.map(market => {
-        if (market.marketId === betModal.marketId) {
-          return {
-            ...market,
-            outcomes: market.outcomes.map(outcome => {
-              if (outcome.outcomeId === betModal.outcomeId) {
-                return {
-                  ...outcome,
-                  totalBets: outcome.totalBets + amount
-                };
-              }
-              return outcome;
-            }),
-            participants: market.participants + 1,
-            volume: market.volume + amount
-          };
-        }
-        return market;
-      })
-    );
-    
+
+    try {
+      // Check user balance (mock user address for demo)
+      const userAddress = '0x742d35Cc6634C0532925a3b844Bc454e4438f44e'; // Mock address
+      const hasBalance = await blockchainService.hasSufficientBalance(userAddress, amount);
+
+      if (!hasBalance) {
+        alert('Insufficient balance for this bet amount');
+        return;
+      }
+
+      // Place bet on blockchain
+      const betResult = await blockchainService.placeBet(
+        betModal.marketId,
+        betModal.outcomeId,
+        amount,
+        userAddress
+      );
+
+      if (betResult.success) {
+        // Update market with new bet
+        setMarkets(prevMarkets =>
+          prevMarkets.map(market => {
+            if (market.marketId === betModal.marketId) {
+              return {
+                ...market,
+                outcomes: market.outcomes.map(outcome => {
+                  if (outcome.outcomeId === betModal.outcomeId) {
+                    return {
+                      ...outcome,
+                      totalBets: outcome.totalBets + amount
+                    };
+                  }
+                  return outcome;
+                }),
+                participants: market.participants + 1,
+                volume: market.volume + amount
+              };
+            }
+            return market;
+          })
+        );
+
+        alert(`Bet placed successfully! Transaction: ${betResult.txHash}`);
+      } else {
+        alert(`Failed to place bet: ${betResult.error}`);
+      }
+    } catch (error) {
+      console.error('Error placing bet:', error);
+      alert('Failed to place bet. Please try again.');
+    }
+
     setBetModal(null);
   };
 

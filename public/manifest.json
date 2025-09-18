@@ -1,0 +1,14 @@
+{
+  "name": "PredictaStream",
+  "description": "PredictaStream is a Base Mini App built with Zara.",
+  "image": "https://dummyimage.com/1200x628/0a0b0d/ffffff.png&text=OG",
+  "external_url": "https://b0bb1a74-44d6-4a62-89f9-a8aeb44d3a73.vercel.app",
+  "properties": {
+    "app": {
+      "name": "PredictaStream",
+      "description": "PredictaStream is a Base Mini App built with Zara.",
+      "url": "https://b0bb1a74-44d6-4a62-89f9-a8aeb44d3a73.vercel.app",
+      "icon": "https://0co.to/images/zara-2.png"
+    }
+  }
+}

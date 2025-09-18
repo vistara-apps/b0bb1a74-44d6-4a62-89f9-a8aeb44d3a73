@@ -1,0 +1,30 @@
+{
+  "accountAssociation": {
+    "header": "",
+    "payload": "",
+    "signature": ""
+  },
+  "frame": {
+    "version": "1",
+    "name": "PredictaStream",
+    "subtitle": "Built with Zara",
+    "description": "PredictaStream is a Base Mini App built with Zara.",
+    "iconUrl": "https://0co.to/images/zara-2.png",
+    "homeUrl": "https://b0bb1a7444d64a6289f9a8aeb44d3a73-fg16.vercel.app",
+    "splashImageUrl": "https://b0bb1a7444d64a6289f9a8aeb44d3a73-fg16.vercel.app/splash.png",
+    "splashBackgroundColor": "#000000",
+    "heroImageUrl": "https://b0bb1a7444d64a6289f9a8aeb44d3a73-fg16.vercel.app/image.png",
+    "tagline": "PredictaStream",
+    "screenshotUrls": [
+      "https://b0bb1a7444d64a6289f9a8aeb44d3a73-fg16.vercel.app/screenshot.png",
+      "https://b0bb1a7444d64a6289f9a8aeb44d3a73-fg16.vercel.app/screenshot.png"
+    ],
+    "primaryCategory": "social",
+    "tags": [
+      "base",
+      "miniapp",
+      "onchainkit"
+    ],
+    "webhookUrl": "https://b0bb1a7444d64a6289f9a8aeb44d3a73-fg16.vercel.app/api/webhook"
+  }
+}
